@@ -1,20 +1,23 @@
 import { Text, TextInput, TouchableOpacity } from "react-native";
 import { styles } from "../../styles";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addTodo } from "../features/todos/todoSlice";
 
-const TodoForm = ({ onSubmit }) => {
+const TodoForm = () => {
+  const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
   const handleSubmit = () => {
-    if (!title) return;
+    if (!title.trim()) return;
     const todo = {
       id: Math.random().toString(),
       title,
       description,
       completed: false,
     };
-    onSubmit(todo);
+    dispatch(addTodo(todo));
     setTitle("");
     setDescription("");
   };
@@ -24,17 +27,15 @@ const TodoForm = ({ onSubmit }) => {
       <TextInput
         placeholder="Enter title"
         style={styles.input}
-        onChangeText={(val) => setTitle(val)}
+        onChangeText={setTitle}
         value={title}
       />
-
       <TextInput
         placeholder="Enter description"
         style={styles.input}
-        onChangeText={(val) => setDescription(val)}
+        onChangeText={setDescription}
         value={description}
       />
-
       <TouchableOpacity
         style={styles.submitBtn}
         activeOpacity={0.7}
